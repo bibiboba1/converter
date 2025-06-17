@@ -2,9 +2,11 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>Конвертер RUB → CZK</title>
-  <link rel="stylesheet" href="/static/style.css?v=1" />
+  <link rel="stylesheet" href="/static/style.css?v=2" />
   <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Istok+Web&display=swap" rel="stylesheet">
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body>
   <div class="container">
@@ -69,7 +71,7 @@
     </div>
 
     <div class="rate-row">
-      <img src="https://cryptologos.cc/logos/tether-usdt-logo.png?v=032" alt="usdt" />
+      <img src="https://cryptologos.cc/logos/tether-usdt-logo.png?v=032" width="20" height="20" alt="usdt" />
       <div class="rate-name">
         <div>USDT/CZK</div>
         <small>&gt; 1000 USDT</small>
@@ -86,17 +88,16 @@
   </div>
 
   <script>
+    Telegram.WebApp.ready();
+    Telegram.WebApp.expand();
+
     const rubInput = document.getElementById("rubInput");
     const czkOutput = document.getElementById("czkOutput");
 
-    rubInput.addEventListener("input", function () {
+    rubInput.addEventListener("input", function() {
       const rubValue = parseFloat(rubInput.value);
       const rate = 3.75;
-      if (!isNaN(rubValue)) {
-        czkOutput.value = (rubValue / rate).toFixed(2);
-      } else {
-        czkOutput.value = "";
-      }
+      czkOutput.value = isNaN(rubValue) ? "" : (rubValue / rate).toFixed(2);
     });
   </script>
 </body>
