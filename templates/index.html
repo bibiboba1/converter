@@ -120,5 +120,57 @@
     });
   });
 </script>
+
+  <!-- Страница выбора метода (изначально скрыта) -->
+<div id="methodPage" class="page" style="display: none;">
+  <h1 class="title">Выберите способ получения</h1>
+  
+  <div class="method-option" onclick="selectMethod('account')">
+    <div class="method-icon">💳</div>
+    <div class="method-info">
+      <div class="method-title">На счёт</div>
+      <div class="method-desc">Перевод CZK на ваш счет</div>
+    </div>
+  </div>
+  
+  <div class="method-option" onclick="selectMethod('cash')">
+    <div class="method-icon">💰</div>
+    <div class="method-info">
+      <div class="method-title">Наличные</div>
+      <div class="method-desc">Получите наличные в Праге</div>
+    </div>
+  </div>
+  
+  <button class="back-btn" onclick="goBack()">Назад</button>
+</div>
+
+<script>
+  // Функция перехода на страницу методов
+  function showMethodPage() {
+    document.getElementById('mainPage').style.display = 'none';
+    document.getElementById('methodPage').style.display = 'block';
+    Telegram.WebApp.BackButton.show();
+  }
+  
+  // Функция возврата
+  function goBack() {
+    document.getElementById('methodPage').style.display = 'none';
+    document.getElementById('mainPage').style.display = 'block';
+    Telegram.WebApp.BackButton.hide();
+  }
+  
+  // Выбор метода
+  function selectMethod(method) {
+    // Здесь будет обработка выбора метода
+    console.log('Выбран метод:', method);
+    // Можно добавить переход на третью страницу
+  }
+  
+  // Обработчик кнопки "Поменять" на главной странице
+  document.getElementById('actionBtn').addEventListener('click', showMethodPage);
+  
+  // Интеграция с кнопкой "Назад" в Telegram
+  Telegram.WebApp.onEvent('backButtonClicked', goBack);
+</script>
 </body>
 </html>
