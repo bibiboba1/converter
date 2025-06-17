@@ -3,108 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <title>Конвертер RUB → CZK</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 0;
-        }
-
-        .container {
-            padding: 20px;
-            max-width: 400px;
-            margin: 60px auto;
-            background: #ffffff;
-            border-radius: 16px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            text-align: center;
-        }
-
-        h2 {
-            color: #444;
-        }
-
-        input[type="number"] {
-            padding: 10px;
-            font-size: 18px;
-            width: 100%;
-            margin-bottom: 15px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-        }
-
-        #result {
-            font-size: 20px;
-            font-weight: bold;
-            color: #222;
-            margin-top: 15px;
-        }
-
-        .rate-info {
-            font-size: 14px;
-            color: #777;
-            margin-top: 10px;
-        }
-    </style>
+    <link rel="stylesheet" href="/static/style.css?v=5">
 </head>
 <body>
-<div class="container">
-    <h2>Конвертер RUB → CZK</h2>
-    <input type="number" id="amount" placeholder="Введите сумму в рублях" />
-    <div id="result">0 CZK</div>
-    <div class="rate-info">
-        <p>До 1000 EUR: 3.6 – 3.8</p>
-        <p>1000–5000 EUR: 3.63 – 3.77</p>
-        <p>Свыше 5000 EUR: 3.65 – 3.75</p>
+    <div class="container">
+        <h1>💱 RUB → CZK</h1>
+        <p class="rate-info">Курс зависит от суммы:</p>
+        <ul>
+            <li>до 1000 EUR: 3.6 / 3.8</li>
+            <li>до 5000 EUR: 3.63 / 3.77</li>
+            <li>выше 5000 EUR: 3.65 / 3.75</li>
+        </ul>
+
+        <div class="form">
+            <label>🇷🇺 RUB:</label>
+            <input type="number" id="rub" placeholder="Введите сумму">
+            <button onclick="convert()">Конвертировать</button>
+        </div>
+
+        <div class="result">
+            <label>🇨🇿 CZK:</label>
+            <span id="czk">0.00</span>
+        </div>
     </div>
-</div>
 
-<script>
-    const amountInput = document.getElementById('amount');
-    const resultDiv = document.getElementById('result');
-
-    function convertRUBtoCZK(rub) {
-        let buyRate, sellRate;
-        // Условно считаем, что сумма в RUB примерно эквивалентна EUR / 100 (для простоты)
-        let eurEstimate = rub / 100;
-
-        if (eurEstimate < 1000) {
-            buyRate = 3.6;
-            sellRate = 3.8;
-        } else if (eurEstimate < 5000) {
-            buyRate = 3.63;
-            sellRate = 3.77;
-        } else {
-            buyRate = 3.65;
-            sellRate = 3.75;
+    <script>
+        async function convert() {
+            const amount = document.getElementById('rub').value;
+            const response = await fetch("/convert", {
+                method: "POST",
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({amount})
+            });
+            const data = await response.json();
+            document.getElementById("czk").textContent = data.czk;
         }
-
-        const buyCZK = rub * buyRate;
-        const sellCZK = rub * sellRate;
-
-        return {
-            buy: buyCZK.toFixed(2),
-            sell: sellCZK.toFixed(2)
-        };
-    }
-
-    amountInput.addEventListener('input', () => {
-        const rub = parseFloat(amountInput.value);
-        if (!isNaN(rub)) {
-            const czk = convertRUBtoCZK(rub);
-            resultDiv.innerHTML = `Покупаем: ${czk.buy} CZK<br>Продаем: ${czk.sell} CZK`;
-        } else {
-            resultDiv.innerText = '0 CZK';
-        }
-    });
-
-    // Инициализация Telegram WebApp
-    const tg = window.Telegram.WebApp;
-    tg.expand(); // Раскрывает WebApp на весь экран
-</script>
+    </script>
 </body>
 </html>
