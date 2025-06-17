@@ -72,49 +72,53 @@
     <button class="action-btn" id="actionBtn">Поменять</button>
   </div>
 
-  <script>
-    Telegram.WebApp.ready();
-    Telegram.WebApp.expand();
+    <script>
+  Telegram.WebApp.ready();
+  Telegram.WebApp.expand();
 
-    const fromAmount = document.getElementById('fromAmount');
-    const toAmount = document.getElementById('toAmount');
-    const actionBtn = document.getElementById('actionBtn');
-    const swapBtn = document.getElementById('swapBtn');
-    const currentRate = 3.75;
+  const fromAmount = document.getElementById('fromAmount');
+  const toAmount = document.getElementById('toAmount');
+  const actionBtn = document.getElementById('actionBtn');
+  const currentRate = 3.75;
 
-    // Валидация ввода (только цифры)
-    fromAmount.addEventListener('input', function(e) {
-      this.value = this.value.replace(/[^0-9]/g, '');
-      const value = parseFloat(this.value) || 0;
-      toAmount.value = (value / currentRate).toFixed(2);
-      
-      // Скрываем клавиатуру после ввода
-      if (this.value.length > 0) {
-        this.blur();
+  // Валидация ввода (только цифры)
+  fromAmount.addEventListener('input', function(e) {
+    this.value = this.value.replace(/[^0-9]/g, '');
+    const value = parseFloat(this.value) || 0;
+    toAmount.value = (value / currentRate).toFixed(2);
+  });
+
+  // Скрытие клавиатуры при нажатии вне поля ввода
+  document.addEventListener('click', function(e) {
+    if (e.target !== fromAmount) {
+      fromAmount.blur();
+    }
+  });
+
+  // Или при нажатии на кнопку "Готово" на клавиатуре
+  fromAmount.addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+      this.blur();
+    }
+  });
+
+  actionBtn.addEventListener('click', function() {
+    // Скрываем клавиатуру перед показом попапа
+    fromAmount.blur();
+    
+    Telegram.WebApp.showPopup({
+      title: 'Подтверждение',
+      message: 'Вы хотите выполнить обмен?',
+      buttons: [
+        {id: 'confirm', type: 'default', text: 'Подтвердить'},
+        {id: 'cancel', type: 'cancel', text: 'Отмена'}
+      ]
+    }, function(buttonId) {
+      if (buttonId === 'confirm') {
+        Telegram.WebApp.showAlert('Обмен подтвержден!');
       }
     });
-
-    // Обработка кнопки "Поменять"
-    actionBtn.addEventListener('click', function() {
-      Telegram.WebApp.showPopup({
-        title: 'Подтверждение',
-        message: 'Вы хотите выполнить обмен?',
-        buttons: [
-          {id: 'confirm', type: 'default', text: 'Подтвердить'},
-          {id: 'cancel', type: 'cancel', text: 'Отмена'}
-        ]
-      }, function(buttonId) {
-        if (buttonId === 'confirm') {
-          // Здесь будет переход на следующую страницу
-          Telegram.WebApp.showAlert('Обмен подтвержден!');
-        }
-      });
-    });
-
-    // Обработка кнопки обмена
-    swapBtn.addEventListener('click', function() {
-      Telegram.WebApp.showAlert('Функция обмена валют будет доступна в следующей версии');
-    });
-  </script>
+  });
+</script>
 </body>
 </html>
