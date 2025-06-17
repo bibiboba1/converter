@@ -3,86 +3,77 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>Конвертер RUB → CZK</title>
-  <link rel="stylesheet" href="/static/style.css?v=2" />
-  <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Istok+Web&display=swap" rel="stylesheet">
+  <title>Конвертер RUB ↔ CZK</title>
+  <link rel="stylesheet" href="/static/style.css?v=3" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body>
   <div class="container">
-    <h1 class="title">Рассчитать</h1>
+    <h1 class="title">Обмен валют</h1>
 
-    <div class="card">
-      <div class="label">Вы отдаете</div>
-      <div class="input-group">
-        <input type="number" id="rubInput" placeholder="0" />
-        <div class="currency">
-          RUB
-          <img src="https://flagcdn.com/w40/ru.png" alt="RUB" />
+    <div class="exchange-container">
+      <div class="exchange-card">
+        <div class="exchange-label">Вы отдаете</div>
+        <div class="exchange-input-group">
+          <input type="number" id="rubInput" placeholder="0" class="exchange-input" />
+          <div class="exchange-currency">
+            <span>RUB</span>
+            <img src="https://flagcdn.com/w40/ru.png" alt="RUB" class="currency-flag" />
+          </div>
         </div>
       </div>
 
-      <div class="swap-button">↑↓</div>
+      <div class="swap-button" id="swapButton">↑↓</div>
 
-      <div class="label">Вы получаете</div>
-      <div class="input-group">
-        <input type="text" id="czkOutput" placeholder="0" readonly />
-        <div class="currency">
-          CZK
-          <img src="https://flagcdn.com/w40/cz.png" alt="CZK" />
+      <div class="exchange-card">
+        <div class="exchange-label">Вы получаете</div>
+        <div class="exchange-input-group">
+          <input type="text" id="czkOutput" placeholder="0" readonly class="exchange-input" />
+          <div class="exchange-currency">
+            <span>CZK</span>
+            <img src="https://flagcdn.com/w40/cz.png" alt="CZK" class="currency-flag" />
+          </div>
         </div>
       </div>
     </div>
 
-    <p class="subtext">Курс фиксируется максимум на один час</p>
+    <p class="subtext">Курс фиксируется после получения ваших средств</p>
 
-    <h2 class="section-title">Курс</h2>
+    <h2 class="section-title">Текущие курсы</h2>
 
-    <div class="rate-row">
-      <img src="https://flagcdn.com/w40/cz.png" alt="czk" />
-      <div class="rate-name">
-        <div>CZK</div>
-        <small>&lt; 20 000 CZK</small>
+    <div class="rates-table">
+      <div class="table-header">
+        <div class="table-col">Сумма</div>
+        <div class="table-col">Покупка</div>
+        <div class="table-col">Продажа</div>
       </div>
-      <div class="rate-value">
-        <div class="rate-label">Покупка</div>
-        <div class="rate-num">-</div>
-      </div>
-      <div class="rate-value">
-        <div class="rate-label">Продажа</div>
-        <div class="rate-num">3.79</div>
-      </div>
-    </div>
 
-    <div class="rate-row">
-      <img src="https://flagcdn.com/w40/cz.png" alt="czk" />
-      <div class="rate-name">
-        <div>CZK</div>
-        <small>&gt; 20 000 CZK</small>
+      <div class="table-row">
+        <div class="table-col">
+          <div>RUB → CZK</div>
+          <small>любая сумма</small>
+        </div>
+        <div class="table-col">-</div>
+        <div class="table-col highlight">3.79</div>
       </div>
-      <div class="rate-value">
-        <div class="rate-label">Покупка</div>
-        <div class="rate-num">-</div>
-      </div>
-      <div class="rate-value">
-        <div class="rate-label">Продажа</div>
-        <div class="rate-num">3.75</div>
-      </div>
-    </div>
 
-    <div class="rate-row">
-      <img src="https://cryptologos.cc/logos/tether-usdt-logo.png?v=032" width="20" height="20" alt="usdt" />
-      <div class="rate-name">
-        <div>USDT/CZK</div>
-        <small>&gt; 1000 USDT</small>
+      <div class="table-row">
+        <div class="table-col">
+          <div>RUB → CZK</div>
+          <small>> 20 000 RUB</small>
+        </div>
+        <div class="table-col">-</div>
+        <div class="table-col highlight">3.75</div>
       </div>
-      <div class="rate-value">
-        <div class="rate-label">Покупка</div>
-        <div class="rate-num">21.45</div>
-      </div>
-      <div class="rate-value">
-        <div class="rate-label">Продажа</div>
-        <div class="rate-num">21.95</div>
+
+      <div class="table-row">
+        <div class="table-col">
+          <div>USDT → CZK</div>
+          <small>> 1000 USDT</small>
+        </div>
+        <div class="table-col highlight">21.45</div>
+        <div class="table-col highlight">21.95</div>
       </div>
     </div>
   </div>
@@ -93,11 +84,19 @@
 
     const rubInput = document.getElementById("rubInput");
     const czkOutput = document.getElementById("czkOutput");
+    const swapButton = document.getElementById("swapButton");
+    let currentRate = 3.75;
 
-    rubInput.addEventListener("input", function() {
+    function calculateExchange() {
       const rubValue = parseFloat(rubInput.value);
-      const rate = 3.75;
-      czkOutput.value = isNaN(rubValue) ? "" : (rubValue / rate).toFixed(2);
+      czkOutput.value = isNaN(rubValue) ? "" : (rubValue / currentRate).toFixed(2);
+    }
+
+    rubInput.addEventListener("input", calculateExchange);
+
+    swapButton.addEventListener("click", function() {
+      // Здесь можно добавить логику смены направления обмена
+      Telegram.WebApp.showAlert("Функция обмена валют местами будет добавлена позже");
     });
   </script>
 </body>
