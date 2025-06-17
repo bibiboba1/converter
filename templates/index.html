@@ -1,102 +1,116 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>Конвертер RUB ↔ CZK</title>
-  <link rel="stylesheet" href="/static/style.css?v=3" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Обмен RUB/CZK</title>
+  <link rel="stylesheet" href="/static/style.css?v=5">
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <style>
+    @font-face {
+      font-family: 'Telegram Sans';
+      src: url('https://core.telegram.org/fonts/TelegramSans-Regular.woff2') format('woff2');
+      font-weight: normal;
+      font-style: normal;
+    }
+    @font-face {
+      font-family: 'Telegram Sans';
+      src: url('https://core.telegram.org/fonts/TelegramSans-Bold.woff2') format('woff2');
+      font-weight: bold;
+      font-style: normal;
+    }
+  </style>
 </head>
 <body>
   <div class="container">
-    <h1 class="title">Обмен валют</h1>
-
-    <div class="exchange-container">
-      <div class="exchange-card">
-        <div class="exchange-label">Вы отдаете</div>
-        <div class="exchange-input-group">
-          <input type="number" id="rubInput" placeholder="0" class="exchange-input" />
-          <div class="exchange-currency">
-            <span>RUB</span>
-            <img src="https://flagcdn.com/w40/ru.png" alt="RUB" class="currency-flag" />
-          </div>
-        </div>
-      </div>
-
-      <div class="swap-button" id="swapButton">↑↓</div>
-
-      <div class="exchange-card">
-        <div class="exchange-label">Вы получаете</div>
-        <div class="exchange-input-group">
-          <input type="text" id="czkOutput" placeholder="0" readonly class="exchange-input" />
-          <div class="exchange-currency">
-            <span>CZK</span>
-            <img src="https://flagcdn.com/w40/cz.png" alt="CZK" class="currency-flag" />
-          </div>
-        </div>
-      </div>
+    <h1 class="title">Рассчитать</h1>
+    
+    <div class="input-section">
+      <div class="input-label">Вы отдаете</div>
+      <input type="text" id="fromAmount" placeholder="0" class="amount-input" inputmode="decimal">
+      <div class="currency-display">RUB</div>
     </div>
-
-    <p class="subtext">Курс фиксируется после получения ваших средств</p>
-
-    <h2 class="section-title">Текущие курсы</h2>
-
-    <div class="rates-table">
-      <div class="table-header">
-        <div class="table-col">Сумма</div>
-        <div class="table-col">Покупка</div>
-        <div class="table-col">Продажа</div>
-      </div>
-
-      <div class="table-row">
-        <div class="table-col">
-          <div>RUB → CZK</div>
-          <small>любая сумма</small>
-        </div>
-        <div class="table-col">-</div>
-        <div class="table-col highlight">3.79</div>
-      </div>
-
-      <div class="table-row">
-        <div class="table-col">
-          <div>RUB → CZK</div>
-          <small>> 20 000 RUB</small>
-        </div>
-        <div class="table-col">-</div>
-        <div class="table-col highlight">3.75</div>
-      </div>
-
-      <div class="table-row">
-        <div class="table-col">
-          <div>USDT → CZK</div>
-          <small>> 1000 USDT</small>
-        </div>
-        <div class="table-col highlight">21.45</div>
-        <div class="table-col highlight">21.95</div>
-      </div>
+    
+    <div class="divider"></div>
+    
+    <div class="input-section">
+      <div class="input-label">Вы получаете</div>
+      <input type="text" id="toAmount" placeholder="0" readonly class="amount-input">
+      <div class="currency-display">CZK</div>
     </div>
+    
+    <p class="rate-info">Курс фиксируется максимум на один час</p>
+    
+    <div class="divider"></div>
+    
+    <div class="currency-pair">
+      <span class="currency-from">RUB</span>
+      <span class="currency-to">CZK</span>
+    </div>
+    
+    <div class="divider"></div>
+    
+    <h2 class="section-title">Курс</h2>
+    
+    <div class="rates-grid">
+      <div class="rate-category">
+        <div class="rate-name">CZK</div>
+        <div class="rate-condition"><20 000 CZK</div>
+      </div>
+      <div class="rate-value">-</div>
+      <div class="rate-value">3.79</div>
+      
+      <div class="rate-category">
+        <div class="rate-name">CZK</div>
+        <div class="rate-condition">>20 000 CZK</div>
+      </div>
+      <div class="rate-value">-</div>
+      <div class="rate-value">3.75</div>
+      
+      <div class="rate-category">
+        <div class="rate-name">USDT/CZK</div>
+        <div class="rate-condition">>1000 USDT</div>
+      </div>
+      <div class="rate-value">21.45</div>
+      <div class="rate-value">21.95</div>
+    </div>
+    
+    <div class="divider"></div>
+    
+    <button class="action-button" id="swapButton">Поменять</button>
   </div>
 
   <script>
     Telegram.WebApp.ready();
     Telegram.WebApp.expand();
-
-    const rubInput = document.getElementById("rubInput");
-    const czkOutput = document.getElementById("czkOutput");
-    const swapButton = document.getElementById("swapButton");
+    
+    const fromAmount = document.getElementById('fromAmount');
+    const toAmount = document.getElementById('toAmount');
+    const swapButton = document.getElementById('swapButton');
     let currentRate = 3.75;
-
-    function calculateExchange() {
-      const rubValue = parseFloat(rubInput.value);
-      czkOutput.value = isNaN(rubValue) ? "" : (rubValue / currentRate).toFixed(2);
-    }
-
-    rubInput.addEventListener("input", calculateExchange);
-
-    swapButton.addEventListener("click", function() {
-      // Здесь можно добавить логику смены направления обмена
-      Telegram.WebApp.showAlert("Функция обмена валют местами будет добавлена позже");
+    
+    // Разрешаем только цифры и точку
+    fromAmount.addEventListener('input', function(e) {
+      this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');
+      const value = parseFloat(this.value) || 0;
+      toAmount.value = (value / currentRate).toFixed(2);
+    });
+    
+    // Обработка кнопки "Поменять"
+    swapButton.addEventListener('click', function() {
+      Telegram.WebApp.showPopup({
+        title: 'Подтверждение',
+        message: 'Вы хотите перейти к обмену?',
+        buttons: [
+          {id: 'confirm', type: 'default', text: 'Да'},
+          {id: 'cancel', type: 'cancel', text: 'Отмена'}
+        ]
+      }, function(buttonId) {
+        if (buttonId === 'confirm') {
+          // Здесь будет переход на следующую страницу
+          Telegram.WebApp.showAlert('Переход на страницу обмена');
+        }
+      });
     });
   </script>
 </body>
