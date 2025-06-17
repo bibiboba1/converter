@@ -8,22 +8,34 @@
   --button-text: #000000;
 }
 
-/* Общие стили */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  font-family: 'Instrument Sans', sans-serif;
+  background-color: #FFFFFF;
+  color: var(--primary-text);
+  line-height: 1.4;
+}
+
 .container {
-  padding: 20px;
+  padding: 16px;
   max-width: 100%;
 }
 
 .title {
   font-size: 20px;
   font-weight: 700;
-  margin-bottom: 24px;
+  margin-bottom: 20px;
   text-align: left;
 }
 
-/* Стили главной страницы */
 .input-section {
-  margin-bottom: 20px;
+  margin-bottom: 16px;
 }
 
 .input-label {
@@ -59,11 +71,17 @@
   margin-left: 12px;
 }
 
-.currency-flag {
+.currency-flag, .small-flag {
   width: 24px;
   height: 16px;
   margin-right: 8px;
   border-radius: 2px;
+  object-fit: cover;
+}
+
+.small-flag {
+  width: 18px;
+  height: 12px;
 }
 
 .swap-btn {
@@ -74,7 +92,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: -10px auto;
+  margin: -8px auto;
   font-size: 18px;
   cursor: pointer;
   border: none;
@@ -85,13 +103,13 @@
   font-weight: 500;
   color: var(--secondary-text);
   text-align: left;
-  margin: 20px 0;
+  margin: 16px 0;
 }
 
 .divider {
   height: 1px;
   background-color: var(--border-color);
-  margin: 20px 0;
+  margin: 16px 0;
 }
 
 .currency-pair {
@@ -102,10 +120,15 @@
   font-weight: 700;
 }
 
+.currency-pair span {
+  display: flex;
+  align-items: center;
+}
+
 .rates-section {
   background-color: #FFF9E6;
   border-radius: 12px;
-  padding: 16px;
+  padding: 12px;
 }
 
 .rate-row {
@@ -114,15 +137,36 @@
   margin-bottom: 12px;
 }
 
-.rate-currency, .rate-condition, .rate-value {
+.rate-row:last-child {
+  margin-bottom: 0;
+}
+
+.rate-currency {
   flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+.rate-currency img {
+  margin-right: 8px;
+}
+
+.rate-condition {
+  width: 100px;
+  font-size: 14px;
+  color: var(--secondary-text);
+}
+
+.rate-value {
+  width: 60px;
+  text-align: right;
+  font-weight: 500;
 }
 
 .usdt-icon {
   width: 24px;
   height: 24px;
-  margin-right: 8px;
-  vertical-align: middle;
+  object-fit: contain;
 }
 
 .action-btn {
@@ -156,4 +200,30 @@
   background: #F7F7F7;
   border-radius: 50%;
   display: flex;
-  align-items: center
+  align-items: center;
+  justify-content: center;
+}
+
+.method-title {
+  font-weight: 600;
+  font-size: 16px;
+  margin-bottom: 4px;
+}
+
+.method-desc {
+  font-size: 14px;
+  color: var(--secondary-text);
+}
+
+.back-btn {
+  width: 100%;
+  padding: 16px;
+  background: #F7F7F7;
+  color: black;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  margin-top: 24px;
+  cursor: pointer;
+}
