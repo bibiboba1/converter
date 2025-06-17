@@ -1,43 +1,103 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <title>Конвертер RUB → CZK</title>
-    <link rel="stylesheet" href="/static/style.css?v=5">
+  <meta charset="UTF-8" />
+  <title>Конвертер RUB → CZK</title>
+  <link rel="stylesheet" href="/static/style.css?v=1" />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Istok+Web&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="container">
-        <h1>💱 RUB → CZK</h1>
-        <p class="rate-info">Курс зависит от суммы:</p>
-        <ul>
-            <li>до 1000 EUR: 3.6 / 3.8</li>
-            <li>до 5000 EUR: 3.63 / 3.77</li>
-            <li>выше 5000 EUR: 3.65 / 3.75</li>
-        </ul>
+  <div class="container">
+    <h1 class="title">Рассчитать</h1>
 
-        <div class="form">
-            <label>🇷🇺 RUB:</label>
-            <input type="number" id="rub" placeholder="Введите сумму">
-            <button onclick="convert()">Конвертировать</button>
+    <div class="card">
+      <div class="label">Вы отдаете</div>
+      <div class="input-group">
+        <input type="number" id="rubInput" placeholder="0" />
+        <div class="currency">
+          RUB
+          <img src="https://flagcdn.com/w40/ru.png" alt="RUB" />
         </div>
+      </div>
 
-        <div class="result">
-            <label>🇨🇿 CZK:</label>
-            <span id="czk">0.00</span>
+      <div class="swap-button">↑↓</div>
+
+      <div class="label">Вы получаете</div>
+      <div class="input-group">
+        <input type="text" id="czkOutput" placeholder="0" readonly />
+        <div class="currency">
+          CZK
+          <img src="https://flagcdn.com/w40/cz.png" alt="CZK" />
         </div>
+      </div>
     </div>
 
-    <script>
-        async function convert() {
-            const amount = document.getElementById('rub').value;
-            const response = await fetch("/convert", {
-                method: "POST",
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({amount})
-            });
-            const data = await response.json();
-            document.getElementById("czk").textContent = data.czk;
-        }
-    </script>
+    <p class="subtext">Курс фиксируется максимум на один час</p>
+
+    <h2 class="section-title">Курс</h2>
+
+    <div class="rate-row">
+      <img src="https://flagcdn.com/w40/cz.png" alt="czk" />
+      <div class="rate-name">
+        <div>CZK</div>
+        <small>&lt; 20 000 CZK</small>
+      </div>
+      <div class="rate-value">
+        <div class="rate-label">Покупка</div>
+        <div class="rate-num">-</div>
+      </div>
+      <div class="rate-value">
+        <div class="rate-label">Продажа</div>
+        <div class="rate-num">3.79</div>
+      </div>
+    </div>
+
+    <div class="rate-row">
+      <img src="https://flagcdn.com/w40/cz.png" alt="czk" />
+      <div class="rate-name">
+        <div>CZK</div>
+        <small>&gt; 20 000 CZK</small>
+      </div>
+      <div class="rate-value">
+        <div class="rate-label">Покупка</div>
+        <div class="rate-num">-</div>
+      </div>
+      <div class="rate-value">
+        <div class="rate-label">Продажа</div>
+        <div class="rate-num">3.75</div>
+      </div>
+    </div>
+
+    <div class="rate-row">
+      <img src="https://cryptologos.cc/logos/tether-usdt-logo.png?v=032" alt="usdt" />
+      <div class="rate-name">
+        <div>USDT/CZK</div>
+        <small>&gt; 1000 USDT</small>
+      </div>
+      <div class="rate-value">
+        <div class="rate-label">Покупка</div>
+        <div class="rate-num">21.45</div>
+      </div>
+      <div class="rate-value">
+        <div class="rate-label">Продажа</div>
+        <div class="rate-num">21.95</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const rubInput = document.getElementById("rubInput");
+    const czkOutput = document.getElementById("czkOutput");
+
+    rubInput.addEventListener("input", function () {
+      const rubValue = parseFloat(rubInput.value);
+      const rate = 3.75;
+      if (!isNaN(rubValue)) {
+        czkOutput.value = (rubValue / rate).toFixed(2);
+      } else {
+        czkOutput.value = "";
+      }
+    });
+  </script>
 </body>
 </html>
