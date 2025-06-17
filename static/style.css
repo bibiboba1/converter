@@ -168,3 +168,68 @@ body {
   cursor: pointer;
   margin-top: 16px;
 }
+
+/* Стили для страницы выбора метода */
+.page {
+  padding: 20px;
+}
+
+.method-option {
+  display: flex;
+  align-items: center;
+  padding: 16px;
+  background: white;
+  border-radius: 12px;
+  margin-bottom: 12px;
+  cursor: pointer;
+}
+
+.method-icon {
+  font-size: 24px;
+  margin-right: 16px;
+  width: 40px;
+  height: 40px;
+  background: #F7F7F7;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.method-info {
+  flex: 1;
+}
+
+.method-title {
+  font-weight: 600;
+  font-size: 16px;
+  margin-bottom: 4px;
+}
+
+.method-desc {
+  font-size: 14px;
+  color: #707579;
+}
+
+.back-btn {
+  width: 100%;
+  padding: 16px;
+  background: #F7F7F7;
+  color: black;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  margin-top: 24px;
+  cursor: pointer;
+}
+
+.page {
+  transition: opacity 0.3s ease;
+}
+.page[style*="display: none"] {
+  opacity: 0;
+}
+.page[style*="display: block"] {
+  opacity: 1;
+}
