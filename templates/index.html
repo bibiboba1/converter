@@ -2,125 +2,66 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Обмен RUB/CZK</title>
-  <link rel="stylesheet" href="/static/style.css?v=6">
-  <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Обмен валют</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 </head>
 <body>
   <div class="container">
-    <h1 class="title">Рассчитать</h1>
+    <h1 class="header">Рассчитать</h1>
     
     <div class="input-section">
       <div class="input-label">Вы отдаете</div>
-      <div class="input-wrapper">
-        <input type="text" id="fromAmount" placeholder="0" class="amount-input" inputmode="decimal">
-        <div class="currency-display">
-          <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA5IDYiIHdpZHRoPSI5MDAiIGhlaWdodD0iNjAwIj48cmVjdCBmaWxsPSIjZmZmIiB3aWR0aD0iOSIgaGVpZ2h0PSIzIi8+PHJlY3QgZmlsbD0iI2Q1MmIxZSIgeT0iMyIgd2lkdGg9IjkiIGhlaWdodD0iMyIvPjxyZWN0IGZpbGw9IiMwMDM5YTYiIHk9IjIiIHdpZHRoPSI5IiBoZWlnaHQ9IjIiLz48L3N2Zz4=" class="currency-flag">
-          <span>RUB</span>
-        </div>
+      <div class="input-field">
+        <input type="number" id="fromAmount" placeholder="0">
+        <div class="currency">RUB</div>
       </div>
     </div>
-    
+
+    <div class="swap-arrow">↑↓</div>
+
     <div class="input-section">
       <div class="input-label">Вы получаете</div>
-      <div class="input-wrapper">
-        <input type="text" id="toAmount" placeholder="0" readonly class="amount-input">
-        <div class="currency-display">
-          <img src="https://flagcdn.com/w40/cz.png" class="currency-flag">
-          <span>CZK</span>
-        </div>
+      <div class="input-field">
+        <input type="number" id="toAmount" placeholder="0" readonly>
+        <div class="currency">CZK</div>
       </div>
     </div>
-    
+
     <p class="rate-info">Курс фиксируется максимум на один час.</p>
-    
+
     <div class="divider"></div>
-    
+
     <h2 class="section-title">Курс</h2>
-    
+
     <div class="rates-container">
-      <div class="rates-header">
-        <div class="rate-category"></div>
-        <div class="rate-column">Покупка</div>
-        <div class="rate-column">Продажа</div>
-      </div>
-      
       <div class="rate-row">
-        <div class="rate-category">
-          <img src="https://flagcdn.com/w40/cz.png" class="currency-flag">
-          <div>
-            <div class="rate-name">CZK</div>
-            <div class="rate-condition"><20 000 CZK</div>
-          </div>
-        </div>
-        <div class="rate-value">-</div>
+        <div class="rate-currency">CZK</div>
+        <div class="rate-condition"><20 000 CZK</div>
         <div class="rate-value">3.79</div>
       </div>
-      
+
       <div class="rate-row">
-        <div class="rate-category">
-          <img src="https://flagcdn.com/w40/cz.png" class="currency-flag">
-          <div>
-            <div class="rate-name">CZK</div>
-            <div class="rate-condition">>20 000 CZK</div>
-          </div>
-        </div>
-        <div class="rate-value">-</div>
+        <div class="rate-currency">CZK</div>
+        <div class="rate-condition">>20 000 CZK</div>
         <div class="rate-value">3.75</div>
       </div>
-      
+
       <div class="rate-row">
-        <div class="rate-category">
-          <img src="https://cryptologos.cc/logos/tether-usdt-logo.png" class="currency-icon">
-          <div>
-            <div class="rate-name">USDT/CZK</div>
-            <div class="rate-condition">>1000 USDT</div>
-          </div>
+        <div class="rate-currency">
+          <img src="/static/images/usdt.png" alt="USDT" class="usdt-icon">
+          USDT/CZK
         </div>
+        <div class="rate-condition">>1000 USDT</div>
         <div class="rate-value">21.45</div>
         <div class="rate-value">21.95</div>
       </div>
     </div>
-    
-    <div class="divider"></div>
-    
-    <button class="action-button" id="swapButton">Поменять</button>
-  </div>
 
-  <script>
-    Telegram.WebApp.ready();
-    Telegram.WebApp.expand();
-    
-    const fromAmount = document.getElementById('fromAmount');
-    const toAmount = document.getElementById('toAmount');
-    const swapButton = document.getElementById('swapButton');
-    let currentRate = 3.75;
-    
-    // Валидация ввода (только цифры и точка)
-    fromAmount.addEventListener('input', function(e) {
-      this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');
-      const value = parseFloat(this.value) || 0;
-      toAmount.value = (value / currentRate).toFixed(2);
-    });
-    
-    // Обработка кнопки "Поменять"
-    swapButton.addEventListener('click', function() {
-      Telegram.WebApp.showPopup({
-        title: 'Подтверждение обмена',
-        message: `Вы хотите обменять ${fromAmount.value || 0} RUB на ${toAmount.value || 0} CZK?`,
-        buttons: [
-          {id: 'confirm', type: 'default', text: 'Подтвердить'},
-          {id: 'cancel', type: 'cancel', text: 'Отмена'}
-        ]
-      }, function(buttonId) {
-        if (buttonId === 'confirm') {
-          Telegram.WebApp.showAlert('Обмен успешно подтвержден!');
-          // Здесь будет переход на следующую страницу
-        }
-      });
-    });
-  </script>
+    <div class="divider"></div>
+
+    <button class="exchange-btn">Поменять</button>
+  </div>
 </body>
 </html>
