@@ -95,7 +95,7 @@
   <div id="methodPage" class="container" style="display:none;">
     <h1 class="title">Выберите способ получения</h1>
     
-    <div class="method-option">
+    <div class="method-option" id="accountOption">
       <div class="method-icon">💳</div>
       <div class="method-info">
         <div class="method-title">На счёт</div>
@@ -111,17 +111,37 @@
       </div>
     </div>
     
-    <button class="back-btn" id="backBtn">Назад</button>
+    <button class="back-btn" id="backBtn1">Назад</button>
+  </div>
+
+  <!-- Страница реквизитов -->
+  <div id="detailsPage" class="container" style="display:none;">
+    <h1 class="title">Укажите реквизиты</h1>
+    
+    <div class="input-section">
+      <div class="input-label">Ваш банковский счёт</div>
+      <input type="text" class="details-input" placeholder="______">
+    </div>
+    
+    <div class="input-section">
+      <div class="input-label">Имя держателя счёта</div>
+      <input type="text" class="details-input" placeholder="______">
+    </div>
+    
+    <button class="back-btn" id="backBtn2">Назад</button>
   </div>
 
   <script>
     Telegram.WebApp.ready();
     Telegram.WebApp.expand();
 
+    // Элементы страниц
     const fromAmount = document.getElementById('fromAmount');
     const toAmount = document.getElementById('toAmount');
     const actionBtn = document.getElementById('actionBtn');
-    const backBtn = document.getElementById('backBtn');
+    const accountOption = document.getElementById('accountOption');
+    const backBtn1 = document.getElementById('backBtn1');
+    const backBtn2 = document.getElementById('backBtn2');
     const currentRate = 3.75;
 
     // Валидация ввода (только цифры)
@@ -131,40 +151,61 @@
       toAmount.value = (value / currentRate).toFixed(2);
     });
 
-    // Скрытие клавиатуры при нажатии Enter
-    fromAmount.addEventListener('keypress', function(e) {
-      if (e.key === 'Enter') {
-        this.blur();
-      }
-    });
+    // Скрытие клавиатуры
+    function hideKeyboard() {
+      document.activeElement.blur();
+    }
 
-    // Скрытие клавиатуры при клике вне поля ввода
-    document.addEventListener('click', function(e) {
-      if (e.target !== fromAmount && e.target !== actionBtn) {
-        fromAmount.blur();
+    // Переход между страницами
+    function showPage(pageId) {
+      document.querySelectorAll('.container').forEach(page => {
+        page.style.display = 'none';
+      });
+      document.getElementById(pageId).style.display = 'block';
+      
+      if (pageId === 'methodPage') {
+        Telegram.WebApp.BackButton.show();
+      } else if (pageId === 'detailsPage') {
+        Telegram.WebApp.BackButton.show();
+      } else {
+        Telegram.WebApp.BackButton.hide();
       }
-    });
+    }
 
-    // Переход на страницу методов
+    // Обработчики событий
     actionBtn.addEventListener('click', function() {
-      document.getElementById('mainPage').style.display = 'none';
-      document.getElementById('methodPage').style.display = 'block';
-      Telegram.WebApp.BackButton.show();
-      fromAmount.blur();
+      hideKeyboard();
+      showPage('methodPage');
     });
 
-    // Возврат на главную
-    backBtn.addEventListener('click', function() {
-      document.getElementById('methodPage').style.display = 'none';
-      document.getElementById('mainPage').style.display = 'block';
-      Telegram.WebApp.BackButton.hide();
+    accountOption.addEventListener('click', function() {
+      showPage('detailsPage');
+    });
+
+    backBtn1.addEventListener('click', function() {
+      showPage('mainPage');
+    });
+
+    backBtn2.addEventListener('click', function() {
+      showPage('methodPage');
     });
 
     // Обработка кнопки "Назад" в Telegram
     Telegram.WebApp.onEvent('backButtonClicked', function() {
-      document.getElementById('methodPage').style.display = 'none';
-      document.getElementById('mainPage').style.display = 'block';
-      Telegram.WebApp.BackButton.hide();
+      if (document.getElementById('detailsPage').style.display === 'block') {
+        showPage('methodPage');
+      } else if (document.getElementById('methodPage').style.display === 'block') {
+        showPage('mainPage');
+      }
+    });
+
+    // Скрытие клавиатуры при клике вне полей ввода
+    document.addEventListener('click', function(e) {
+      if (!e.target.classList.contains('details-input') && 
+          e.target !== fromAmount && 
+          e.target !== actionBtn) {
+        hideKeyboard();
+      }
     });
   </script>
 </body>
