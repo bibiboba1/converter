@@ -1,212 +1,181 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Обмен валют</title>
-  <link rel="stylesheet" href="/static/style.css">
-  <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Обмен RUB на CZK</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <!-- Главная страница -->
-  <div id="mainPage" class="container">
-    <h1 class="title">Рассчитать</h1>
-    
-    <div class="input-section">
-      <div class="input-label">Вы отдаете</div>
-      <div class="input-field">
-        <input type="text" id="fromAmount" placeholder="0" pattern="[0-9]*" inputmode="decimal" enterkeyhint="done">
-        <div class="currency-display">
-          <img src="https://flagcdn.com/w40/ru.png" class="currency-flag" alt="RUB">
-          RUB
+    <!-- Экран 1: Калькулятор -->
+    <div class="screen" id="screen1">
+        <h1>Рассчитать</h1>
+
+        <div class="card">
+            <div class="input-group">
+                <div class="input-label">Вы отдаете</div>
+                <div class="input-field">
+                    <input type="number" id="inputAmount" placeholder="0" inputmode="decimal" oninput="document.getElementById('outputAmount').value = (this.value / 3.75).toFixed(2)">
+                    <div class="currency-flag">
+                        <img src="static/images/russian_flag.png" alt="RUB">
+                        <span>RUB</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <div class="input-label">Вы получаете</div>
+                <div class="input-field">
+                    <input type="number" id="outputAmount" placeholder="0" readonly>
+                    <div class="currency-flag">
+                        <img src="static/images/czech_flag.png" alt="CZK">
+                        <span>CZK</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="rate-info">Курс фиксируется максимум на один час</div>
         </div>
-      </div>
-    </div>
 
-    <div class="swap-btn">↑↓</div>
+        <div class="divider"></div>
 
-    <div class="input-section">
-      <div class="input-label">Вы получаете</div>
-      <div class="input-field">
-        <input type="text" id="toAmount" placeholder="0" readonly>
-        <div class="currency-display">
-          <img src="https://flagcdn.com/w40/cz.png" class="currency-flag" alt="CZK">
-          CZK
+        <div class="card rate-card">
+            <div class="rate-header">
+                <strong>RUB</strong>
+            </div>
+
+            <div class="rate-row">
+                <div class="rate-currency">
+                    <img src="static/images/czech_flag.png" alt="CZK">
+                    <span>CZK < 20 000 CZK</span>
+                </div>
+                <div class="rate-values">
+                    <span>Покупка: -</span>
+                    <span>Продажа: 3.79</span>
+                </div>
+            </div>
+
+            <div class="rate-row">
+                <div class="rate-currency">
+                    <img src="static/images/czech_flag.png" alt="CZK">
+                    <span>CZK > 20 000 CZK</span>
+                </div>
+                <div class="rate-values">
+                    <span>Покупка: -</span>
+                    <span>Продажа: 3.75</span>
+                </div>
+            </div>
+
+            <div class="rate-row">
+                <div class="rate-currency">
+                    <img src="static/images/usdt.png" alt="USDT">
+                    <span>USDT/CZK > 1 000 USDT</span>
+                </div>
+                <div class="rate-values">
+                    <span>Покупка: 21.45</span>
+                    <span>Продажа: 21.95</span>
+                </div>
+            </div>
         </div>
-      </div>
+
+        <a href="#screen2" class="btn primary-btn">Поменять</a>
     </div>
 
-    <p class="rate-info">Курс фиксируется максимум на один час</p>
+    <!-- Экран 2: Способ получения -->
+    <div class="screen hidden" id="screen2">
+        <h1>Выберите способ получения</h1>
 
-    <div class="divider"></div>
-
-    <div class="currency-pair">
-      <span class="currency-from">
-        <img src="https://flagcdn.com/w40/ru.png" class="small-flag" alt="RUB">
-        RUB
-      </span>
-      <span class="currency-to">
-        <img src="https://flagcdn.com/w40/cz.png" class="small-flag" alt="CZK">
-        CZK
-      </span>
-    </div>
-
-    <div class="divider"></div>
-
-    <div class="rates-section">
-      <div class="rate-row">
-        <div class="rate-currency">
-          <img src="https://flagcdn.com/w40/cz.png" class="currency-flag" alt="CZK">
-          CZK
+        <div class="card option-card">
+            <a href="#screen3" class="option-content">
+                <div class="option-title">На счёт</div>
+                <div class="option-description">Перевод CZK на ваш счет</div>
+            </a>
         </div>
-        <div class="rate-condition">< 20 000 CZK</div>
-        <div class="rate-value">-</div>
-        <div class="rate-value">3.79</div>
-      </div>
 
-      <div class="rate-row">
-        <div class="rate-currency">
-          <img src="https://flagcdn.com/w40/cz.png" class="currency-flag" alt="CZK">
-          CZK
+        <div class="card option-card">
+            <div class="option-content">
+                <div class="option-title">Наличные</div>
+                <div class="option-description">Получите наличные в Праге</div>
+            </div>
         </div>
-        <div class="rate-condition">> 20 000 CZK</div>
-        <div class="rate-value">-</div>
-        <div class="rate-value">3.75</div>
-      </div>
 
-      <div class="rate-row">
-        <div class="rate-currency">
-          <img src="/static/images/usdt.png" class="usdt-icon" alt="USDT">
-          USDT/CZK
+        <a href="#screen1" class="btn secondary-btn">Назад</a>
+    </div>
+
+    <!-- Экран 3: Ввод реквизитов -->
+    <div class="screen hidden" id="screen3">
+        <h1>Укажите данные для перевода</h1>
+
+        <div class="card">
+            <div class="input-group">
+                <div class="input-label">Ваш чешский счёт</div>
+                <input type="text" id="accountNumber" placeholder="Введите номер счета">
+            </div>
         </div>
-        <div class="rate-condition">> 1 000 USDT</div>
-        <div class="rate-value">21.45</div>
-        <div class="rate-value">21.95</div>
-      </div>
+
+        <a href="#screen4" class="btn primary-btn">Создать заявку</a>
+        <a href="#screen2" class="btn secondary-btn">Назад</a>
     </div>
 
-    <div class="divider"></div>
+    <!-- Экран 4: Реквизиты -->
+    <div class="screen hidden" id="screen4">
+        <h1>Реквизиты</h1>
 
-    <button class="action-btn" id="actionBtn">Поменять</button>
-  </div>
+        <div class="card">
+            <div class="details-row">
+                <span class="details-label">Банк получателя</span>
+                <span class="details-value">Сбербанк</span>
+            </div>
 
-  <!-- Страница выбора метода -->
-  <div id="methodPage" class="container" style="display:none;">
-    <h1 class="title">Выберите способ получения</h1>
-    
-    <div class="method-option" id="accountOption">
-      <div class="method-icon">💳</div>
-      <div class="method-info">
-        <div class="method-title">На счёт</div>
-        <div class="method-desc">Перевод CZK на ваш счет</div>
-      </div>
+            <div class="details-row">
+                <span class="details-label">Номер СБП</span>
+                <span class="details-value">+7(952) 777 78 78</span>
+            </div>
+
+            <div class="details-row">
+                <span class="details-label">Получатель</span>
+                <span class="details-value">Владимир П.</span>
+            </div>
+
+            <div class="details-row">
+                <span class="details-label">Сумма</span>
+                <span class="details-value" id="paymentAmount">0 RUB</span>
+            </div>
+        </div>
+
+        <div class="upload-notice">
+            Загрузите квитанцию об оплате
+        </div>
+
+        <a href="#screen5" class="btn primary-btn">Оплачено</a>
+        <a href="#screen3" class="btn secondary-btn">Назад</a>
     </div>
-    
-    <div class="method-option">
-      <div class="method-icon">💰</div>
-      <div class="method-info">
-        <div class="method-title">Наличные</div>
-        <div class="method-desc">Получите наличные в Праге</div>
-      </div>
+
+    <!-- Экран 5: Подтверждение -->
+    <div class="screen hidden" id="screen5">
+        <h1>Ожидайте подтверждения<br>и перевода</h1>
+
+        <div class="timer">59:59</div>
+
+        <div class="account-info">
+            <div class="account-label">Счет пополнения</div>
+            <div class="account-number">Введите номер счета на экране 3</div>
+        </div>
+
+        <a href="#" class="btn secondary-btn">Поддержка</a>
     </div>
-    
-    <button class="back-btn" id="backBtn1">Назад</button>
-  </div>
 
-  <!-- Страница реквизитов -->
-  <div id="detailsPage" class="container" style="display:none;">
-    <h1 class="title">Укажите реквизиты</h1>
-    
-    <div class="input-section">
-      <div class="input-label">Ваш банковский счёт</div>
-      <input type="text" class="details-input" placeholder="______">
-    </div>
-    
-    <div class="input-section">
-      <div class="input-label">Имя держателя счёта</div>
-      <input type="text" class="details-input" placeholder="______">
-    </div>
-    
-    <button class="back-btn" id="backBtn2">Назад</button>
-  </div>
-
-  <script>
-    Telegram.WebApp.ready();
-    Telegram.WebApp.expand();
-
-    // Элементы страниц
-    const fromAmount = document.getElementById('fromAmount');
-    const toAmount = document.getElementById('toAmount');
-    const actionBtn = document.getElementById('actionBtn');
-    const accountOption = document.getElementById('accountOption');
-    const backBtn1 = document.getElementById('backBtn1');
-    const backBtn2 = document.getElementById('backBtn2');
-    const currentRate = 3.75;
-
-    // Валидация ввода (только цифры)
-    fromAmount.addEventListener('input', function() {
-      this.value = this.value.replace(/[^0-9]/g, '');
-      const value = parseFloat(this.value) || 0;
-      toAmount.value = (value / currentRate).toFixed(2);
-    });
-
-    // Скрытие клавиатуры
-    function hideKeyboard() {
-      document.activeElement.blur();
-    }
-
-    // Переход между страницами
-    function showPage(pageId) {
-      document.querySelectorAll('.container').forEach(page => {
-        page.style.display = 'none';
-      });
-      document.getElementById(pageId).style.display = 'block';
-      
-      if (pageId === 'methodPage') {
-        Telegram.WebApp.BackButton.show();
-      } else if (pageId === 'detailsPage') {
-        Telegram.WebApp.BackButton.show();
-      } else {
-        Telegram.WebApp.BackButton.hide();
-      }
-    }
-
-    // Обработчики событий
-    actionBtn.addEventListener('click', function() {
-      hideKeyboard();
-      showPage('methodPage');
-    });
-
-    accountOption.addEventListener('click', function() {
-      showPage('detailsPage');
-    });
-
-    backBtn1.addEventListener('click', function() {
-      showPage('mainPage');
-    });
-
-    backBtn2.addEventListener('click', function() {
-      showPage('methodPage');
-    });
-
-    // Обработка кнопки "Назад" в Telegram
-    Telegram.WebApp.onEvent('backButtonClicked', function() {
-      if (document.getElementById('detailsPage').style.display === 'block') {
-        showPage('methodPage');
-      } else if (document.getElementById('methodPage').style.display === 'block') {
-        showPage('mainPage');
-      }
-    });
-
-    // Скрытие клавиатуры при клике вне полей ввода
-    document.addEventListener('click', function(e) {
-      if (!e.target.classList.contains('details-input') && 
-          e.target !== fromAmount && 
-          e.target !== actionBtn) {
-        hideKeyboard();
-      }
-    });
-  </script>
+    <style>
+        /* Динамическое отображение экранов */
+        .screen:target {
+            display: flex;
+        }
+        .screen:target ~ .screen {
+            display: none;
+        }
+        #screen1:not(:target) ~ #screen1 {
+            display: flex;
+        }
+    </style>
 </body>
 </html>
