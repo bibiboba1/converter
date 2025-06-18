@@ -63,6 +63,15 @@ body {
   outline: none;
 }
 
+.details-input {
+  width: 100%;
+  border: none;
+  border-bottom: 1px solid var(--border-color);
+  padding: 12px 0;
+  font-size: 16px;
+  outline: none;
+}
+
 .currency-display {
   display: flex;
   align-items: center;
@@ -190,6 +199,7 @@ body {
   background: white;
   border-radius: 12px;
   margin-bottom: 12px;
+  cursor: pointer;
 }
 
 .method-icon {
