@@ -1,75 +1,64 @@
 :root {
   --primary-text: #000000;
-  --secondary-text: #707579;
-  --yellow-accent: #FFD800;
+  --secondary-text: #737373;
+  --accent-color: #FFD800;
   --input-bg: #F7F7F7;
   --border-color: #E0E0E0;
-  --button-bg: #FFD800;
-  --button-text: #000000;
-}
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  -webkit-tap-highlight-color: transparent;
 }
 
 body {
   font-family: 'Instrument Sans', sans-serif;
-  background-color: #FFFFFF;
+  background-color: white;
   color: var(--primary-text);
-  line-height: 1.4;
+  margin: 0;
+  padding: 0;
 }
 
 .container {
-  padding: 16px;
   max-width: 100%;
+  padding: 20px;
 }
 
 .title {
-  font-size: 20px;
-  font-weight: 700;
-  margin-bottom: 20px;
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 30px;
   text-align: left;
 }
 
 .input-section {
-  margin-bottom: 16px;
+  margin-bottom: 25px;
 }
 
 .input-label {
-  font-size: 14px;
+  font-size: 18px;
+  color: #3C3C3C;
+  margin-bottom: 12px;
   font-weight: 500;
-  color: var(--secondary-text);
-  margin-bottom: 8px;
-  text-align: left;
 }
 
 .input-field {
   display: flex;
   align-items: center;
   background-color: var(--input-bg);
-  border-radius: 12px;
-  padding: 16px;
+  border-radius: 44px;
+  padding: 25px;
+  height: 100px;
 }
 
 .input-field input {
   flex: 1;
   border: none;
   background: transparent;
-  font-size: 24px;
-  font-weight: 600;
+  font-size: 32px;
+  font-family: 'Inria Sans', sans-serif;
+  font-weight: 300;
+  color: #ACACAC;
   outline: none;
 }
 
-.details-input {
-  width: 100%;
-  border: none;
-  border-bottom: 1px solid var(--border-color);
-  padding: 12px 0;
-  font-size: 16px;
-  outline: none;
+.input-field input::placeholder {
+  color: #ACACAC;
 }
 
 .currency-display {
@@ -77,73 +66,63 @@ body {
   align-items: center;
   font-size: 24px;
   font-weight: 600;
-  margin-left: 12px;
+  margin-left: 15px;
 }
 
-.currency-flag, .small-flag {
-  width: 24px;
-  height: 16px;
-  margin-right: 8px;
-  border-radius: 2px;
+.currency-flag, .currency-icon {
+  width: 50px;
+  height: 35px;
+  margin-right: 12px;
+  border-radius: 50%;
   object-fit: cover;
 }
 
-.small-flag {
-  width: 18px;
-  height: 12px;
-}
-
 .swap-btn {
-  width: 40px;
-  height: 40px;
-  background-color: var(--yellow-accent);
+  width: 70px;
+  height: 70px;
+  background-color: var(--accent-color);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: -8px auto;
-  font-size: 18px;
+  margin: -15px auto;
+  font-size: 24px;
   cursor: pointer;
   border: none;
+  z-index: 1;
+  position: relative;
 }
 
 .rate-info {
-  font-size: 14px;
-  font-weight: 500;
+  font-size: 16px;
   color: var(--secondary-text);
   text-align: left;
-  margin: 16px 0;
+  margin: 20px 0;
 }
 
 .divider {
   height: 1px;
   background-color: var(--border-color);
-  margin: 16px 0;
+  margin: 30px 0;
 }
 
-.currency-pair {
-  display: flex;
-  justify-content: center;
-  gap: 12px;
-  margin-bottom: 16px;
-  font-weight: 700;
+.section-title {
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  text-align: left;
 }
 
-.currency-pair span {
-  display: flex;
-  align-items: center;
-}
-
-.rates-section {
+.rates-container {
   background-color: #FFF9E6;
-  border-radius: 12px;
-  padding: 12px;
+  border-radius: 25px;
+  padding: 20px;
 }
 
 .rate-row {
   display: flex;
   align-items: center;
-  margin-bottom: 12px;
+  margin-bottom: 25px;
 }
 
 .rate-row:last-child {
@@ -154,86 +133,32 @@ body {
   flex: 1;
   display: flex;
   align-items: center;
-}
-
-.rate-currency img {
-  margin-right: 8px;
+  font-size: 22px;
+  font-weight: 600;
 }
 
 .rate-condition {
-  width: 100px;
-  font-size: 14px;
+  width: 180px;
+  font-size: 16px;
   color: var(--secondary-text);
 }
 
 .rate-value {
-  width: 60px;
+  width: 100px;
   text-align: right;
-  font-weight: 500;
-}
-
-.usdt-icon {
-  width: 24px;
-  height: 24px;
-  object-fit: contain;
+  font-size: 22px;
+  font-family: 'Istok Web', sans-serif;
 }
 
 .action-btn {
   width: 100%;
-  padding: 16px;
-  background-color: var(--button-bg);
-  color: var(--button-text);
+  padding: 25px;
+  background-color: var(--accent-color);
+  color: var(--primary-text);
   border: none;
-  border-radius: 12px;
-  font-size: 16px;
-  font-weight: 600;
-  cursor: pointer;
-  margin-top: 16px;
-}
-
-/* Стили страницы выбора метода */
-.method-option {
-  display: flex;
-  align-items: center;
-  padding: 16px;
-  background: white;
-  border-radius: 12px;
-  margin-bottom: 12px;
-  cursor: pointer;
-}
-
-.method-icon {
+  border-radius: 50px;
   font-size: 24px;
-  margin-right: 16px;
-  width: 40px;
-  height: 40px;
-  background: #F7F7F7;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.method-title {
   font-weight: 600;
-  font-size: 16px;
-  margin-bottom: 4px;
-}
-
-.method-desc {
-  font-size: 14px;
-  color: var(--secondary-text);
-}
-
-.back-btn {
-  width: 100%;
-  padding: 16px;
-  background: #F7F7F7;
-  color: black;
-  border: none;
-  border-radius: 12px;
-  font-size: 16px;
-  font-weight: 600;
-  margin-top: 24px;
   cursor: pointer;
+  margin-top: 20px;
 }
