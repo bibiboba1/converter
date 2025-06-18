@@ -2,180 +2,79 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
+    <title>Калькулятор</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Обмен RUB на CZK</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
-    <!-- Экран 1: Калькулятор -->
-    <div class="screen" id="screen1">
+    <div class="container">
         <h1>Рассчитать</h1>
 
-        <div class="card">
-            <div class="input-group">
-                <div class="input-label">Вы отдаете</div>
-                <div class="input-field">
-                    <input type="number" id="inputAmount" placeholder="0" inputmode="decimal" oninput="document.getElementById('outputAmount').value = (this.value / 3.75).toFixed(2)">
-                    <div class="currency-flag">
-                        <img src="static/images/russian_flag.png" alt="RUB">
-                        <span>RUB</span>
-                    </div>
+        <div class="converter-block">
+            <label>Вы отдаете</label>
+            <div class="input-row">
+                <input type="number" id="inputRUB" placeholder="0">
+                <div class="currency">
+                    <span>RUB</span>
+                    <img src="{{ url_for('static', filename='images/rub.png') }}" alt="RUB">
                 </div>
             </div>
 
-            <div class="input-group">
-                <div class="input-label">Вы получаете</div>
-                <div class="input-field">
-                    <input type="number" id="outputAmount" placeholder="0" readonly>
-                    <div class="currency-flag">
-                        <img src="static/images/czech_flag.png" alt="CZK">
-                        <span>CZK</span>
-                    </div>
-                </div>
+            <div class="switch-btn">
+                <img src="{{ url_for('static', filename='images/switch.png') }}" alt="Switch">
             </div>
 
-            <div class="rate-info">Курс фиксируется максимум на один час</div>
-        </div>
-
-        <div class="divider"></div>
-
-        <div class="card rate-card">
-            <div class="rate-header">
-                <strong>RUB</strong>
-            </div>
-
-            <div class="rate-row">
-                <div class="rate-currency">
-                    <img src="static/images/czech_flag.png" alt="CZK">
-                    <span>CZK < 20 000 CZK</span>
-                </div>
-                <div class="rate-values">
-                    <span>Покупка: -</span>
-                    <span>Продажа: 3.79</span>
-                </div>
-            </div>
-
-            <div class="rate-row">
-                <div class="rate-currency">
-                    <img src="static/images/czech_flag.png" alt="CZK">
-                    <span>CZK > 20 000 CZK</span>
-                </div>
-                <div class="rate-values">
-                    <span>Покупка: -</span>
-                    <span>Продажа: 3.75</span>
-                </div>
-            </div>
-
-            <div class="rate-row">
-                <div class="rate-currency">
-                    <img src="static/images/usdt.png" alt="USDT">
-                    <span>USDT/CZK > 1 000 USDT</span>
-                </div>
-                <div class="rate-values">
-                    <span>Покупка: 21.45</span>
-                    <span>Продажа: 21.95</span>
+            <label>Вы получаете</label>
+            <div class="input-row">
+                <input type="number" id="outputCZK" placeholder="0" disabled>
+                <div class="currency">
+                    <span>CZK</span>
+                    <img src="{{ url_for('static', filename='images/czk.png') }}" alt="CZK">
                 </div>
             </div>
         </div>
 
-        <a href="#screen2" class="btn primary-btn">Поменять</a>
+        <p class="note">Курс фиксируется максимум на один час</p>
+
+        <div class="rates">
+            <h2>Курс</h2>
+            <div class="rate-item">
+                <div class="left">
+                    <img src="{{ url_for('static', filename='images/czk.png') }}">
+                    <span>CZK <small>&lt; 20 000 CZK</small></span>
+                </div>
+                <div class="right">
+                    <span>Покупка -</span>
+                    <span>Продажа 3.79</span>
+                </div>
+            </div>
+            <div class="rate-item">
+                <div class="left">
+                    <img src="{{ url_for('static', filename='images/czk.png') }}">
+                    <span>CZK <small>&gt; 20 000 CZK</small></span>
+                </div>
+                <div class="right">
+                    <span>Покупка -</span>
+                    <span>Продажа 3.75</span>
+                </div>
+            </div>
+            <div class="rate-item">
+                <div class="left">
+                    <img src="{{ url_for('static', filename='images/usdt.png') }}">
+                    <span>USDT/CZK <small>&gt; 1000 USDT</small></span>
+                </div>
+                <div class="right">
+                    <span>Покупка 21.45</span>
+                    <span>Продажа 21.95</span>
+                </div>
+            </div>
+        </div>
+
+        <form action="/confirm" method="get">
+            <button type="submit" class="main-btn">Поменять</button>
+        </form>
     </div>
 
-    <!-- Экран 2: Способ получения -->
-    <div class="screen hidden" id="screen2">
-        <h1>Выберите способ получения</h1>
-
-        <div class="card option-card">
-            <a href="#screen3" class="option-content">
-                <div class="option-title">На счёт</div>
-                <div class="option-description">Перевод CZK на ваш счет</div>
-            </a>
-        </div>
-
-        <div class="card option-card">
-            <div class="option-content">
-                <div class="option-title">Наличные</div>
-                <div class="option-description">Получите наличные в Праге</div>
-            </div>
-        </div>
-
-        <a href="#screen1" class="btn secondary-btn">Назад</a>
-    </div>
-
-    <!-- Экран 3: Ввод реквизитов -->
-    <div class="screen hidden" id="screen3">
-        <h1>Укажите данные для перевода</h1>
-
-        <div class="card">
-            <div class="input-group">
-                <div class="input-label">Ваш чешский счёт</div>
-                <input type="text" id="accountNumber" placeholder="Введите номер счета">
-            </div>
-        </div>
-
-        <a href="#screen4" class="btn primary-btn">Создать заявку</a>
-        <a href="#screen2" class="btn secondary-btn">Назад</a>
-    </div>
-
-    <!-- Экран 4: Реквизиты -->
-    <div class="screen hidden" id="screen4">
-        <h1>Реквизиты</h1>
-
-        <div class="card">
-            <div class="details-row">
-                <span class="details-label">Банк получателя</span>
-                <span class="details-value">Сбербанк</span>
-            </div>
-
-            <div class="details-row">
-                <span class="details-label">Номер СБП</span>
-                <span class="details-value">+7(952) 777 78 78</span>
-            </div>
-
-            <div class="details-row">
-                <span class="details-label">Получатель</span>
-                <span class="details-value">Владимир П.</span>
-            </div>
-
-            <div class="details-row">
-                <span class="details-label">Сумма</span>
-                <span class="details-value" id="paymentAmount">0 RUB</span>
-            </div>
-        </div>
-
-        <div class="upload-notice">
-            Загрузите квитанцию об оплате
-        </div>
-
-        <a href="#screen5" class="btn primary-btn">Оплачено</a>
-        <a href="#screen3" class="btn secondary-btn">Назад</a>
-    </div>
-
-    <!-- Экран 5: Подтверждение -->
-    <div class="screen hidden" id="screen5">
-        <h1>Ожидайте подтверждения<br>и перевода</h1>
-
-        <div class="timer">59:59</div>
-
-        <div class="account-info">
-            <div class="account-label">Счет пополнения</div>
-            <div class="account-number">Введите номер счета на экране 3</div>
-        </div>
-
-        <a href="#" class="btn secondary-btn">Поддержка</a>
-    </div>
-
-    <style>
-        /* Динамическое отображение экранов */
-        .screen:target {
-            display: flex;
-        }
-        .screen:target ~ .screen {
-            display: none;
-        }
-        #screen1:not(:target) ~ #screen1 {
-            display: flex;
-        }
-    </style>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>
